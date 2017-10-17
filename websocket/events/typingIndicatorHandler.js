@@ -1,7 +1,7 @@
 const utils = require('../utils');
 let sockets = require('../sockets');
 
-const typingOn = (data, user) => {
+const typingIndicatorHandler = (data, user, evt) => {
   let emitter = utils.getEmitter(sockets, user);
   if (emitter === null) {
     return;
@@ -14,7 +14,7 @@ const typingOn = (data, user) => {
   let msg = {
     emitter: user.userId
   };
-  recipient.socket.emit('typing-on', msg);
+  recipient.socket.emit(evt, msg);
 };
 
-module.exports = typingOn;
+module.exports = typingIndicatorHandler;
