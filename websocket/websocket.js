@@ -17,6 +17,10 @@ const setUpWebsocket = server => {
 
     socket.on('message', data => { eventHandler.message(data, user); });
 
+    socket.on('typing-off', data => { eventHandler.typingOff(data, user); });
+
+    socket.on('typing-on', data => { eventHandler.typingOn(data, user); });
+
     socket.on('disconnect', () => { eventHandler.disconnect(user); });
   });
 };
