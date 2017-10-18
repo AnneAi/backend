@@ -29,4 +29,31 @@ describe('database/controllers/rooms', () => {
       done();
     });
   });
+
+  it('findPassword > should find the room named TEST with password PASS', (done) => {
+    let testRoom = {
+      name: 'TEST',
+      password: 'PASS',
+      teachers: []
+    };
+
+    roomsCtrl.create(testRoom.name, testRoom.password, testRoom.teachers, () => {
+      roomsCtrl.findPassword(testRoom.name, testRoom.password, room => {
+        roomsCtrl.delete(testRoom.name, () => {
+          expect(room).to.not.equal(null);
+          done();
+        });
+      });
+    });
+  });
+
+  it('findPassword > should not find the room named TEST with password', (done) => {
+    let name = 'TEST';
+    let password = 'PASS';
+
+    roomsCtrl.findPassword(name, password, room => {
+      expect(room).to.equal(null);
+      done();
+    });
+  });
 });
