@@ -1,8 +1,8 @@
 'use strict';
-let utils = require('../websocket/utils');
+let userManager = require('../websocket/managers/user');
 let expect = require('chai').expect;
 
-describe('websocket/utils', () => {
+describe('websocket/userManager', () => {
 
   it('getUnderloadedTeacherId > should return the if of the most underloaded teacher', () => {
     let sockets = {
@@ -21,7 +21,7 @@ describe('websocket/utils', () => {
       }
     };
 
-    expect(utils.getUnderloadedTeacherId(sockets, 'test')).to.equal('2');
+    expect(userManager.getUnderloadedTeacherId(sockets, 'test')).to.equal('2');
   });
 
   it('getUnderloadedTeacherId > should return null', () => {
@@ -31,7 +31,7 @@ describe('websocket/utils', () => {
       }
     };
 
-    expect(utils.getUnderloadedTeacherId(sockets, 'test')).to.equal(null);
+    expect(userManager.getUnderloadedTeacherId(sockets, 'test')).to.equal(null);
   });
 
   it('countTeachers > should return the number of connected teachers', () => {
@@ -45,6 +45,6 @@ describe('websocket/utils', () => {
       }
     };
 
-    expect(utils.countTeachers(sockets, 'test')).to.equal(3);
+    expect(userManager.countTeachers(sockets, 'test')).to.equal(3);
   });
 });

@@ -1,5 +1,5 @@
-const roomManager = require('../roomManager');
-const utils = require('../utils');
+const roomManager = require('../managers/room');
+const userManager = require('../managers/user');
 const mailer = require('../../utils/mailer');
 let sockets = require('../sockets');
 
@@ -13,14 +13,12 @@ const init = (data, socket, user) => {
     return;
   }
 
-  roomManager.doesExist(roomId, room => {
+  roomManager.doesExistInDb(roomId, room => {
     if (room === null) {
       return;
     }
 
-    if (!sockets[roomId]) {
-      roomManager.create(sockets, roomId, room.password);
-    }
+    roomManager.createIfDoesntExistInRAM(sockets, roomId);
 
     user.type = emitterType;
     user.roomId = roomId;
@@ -31,21 +29,21 @@ const init = (data, socket, user) => {
     let emitter = sockets[roomId][emitterType][user.userId];
     emitter.socket.emit('init', { id: user.userId });
 
-    let nbTeachers = utils.countTeachers(sockets, roomId);
-    if (utils.isStudent(user)) {
+    let nbTeachers = userManager.countTeachers(sockets, roomId);
+    if (userManager.isStudent(user)) {
       if (nbTeachers === 0) {
         mailer.sendMail(room.teachers, 'new-student', { roomName: roomId , studentName: name });
       } else {
-        utils.connectToUnderloadedTeacher(sockets, user, emitter);
+        userManager.connectToUnderloadedTeacher(sockets, user, emitter);
       }
-    } else if (utils.isTeacher(user)) {
+    } else if (userManager.isTeacher(user)) {
       emitter.load = 0;
 
       if (nbTeachers === 1) {
         Object.keys(sockets[roomId]['student']).forEach( id => {
           let studentUser = { roomId, userId: id, type: 'student' };
-          let studentEmitter = utils.getEmitter(sockets, studentUser);
-          utils.connectToUnderloadedTeacher(sockets, studentUser, studentEmitter);
+          let studentEmitter = userManager.getEmitter(sockets, studentUser);
+          userManager.connectToUnderloadedTeacher(sockets, studentUser, studentEmitter);
         });
       }
     }
