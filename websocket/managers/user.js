@@ -39,19 +39,6 @@ const connectToUnderloadedTeacher = (sockets, user, emitter) => {
   });
 };
 
-/*  Returns the number of connected teachers in a room.
-
-    PARAMS
-      sockets (object)
-      roomId (string): id of the room
-
-    RETURN
-      (number): the number of connected teachers in the room
-*/
-const countTeachers = (sockets, roomId) => {
-  return Object.keys(sockets[roomId]['teacher']).length;
-};
-
 /*  Returns the client associated to the given id.
 
     PARAMS
@@ -169,7 +156,6 @@ const strUser = user => {
 
 module.exports = {
   connectToUnderloadedTeacher,
-  countTeachers,
   getEmitter,
   getEmitterAndRecipient,
   getUnderloadedTeacherId,

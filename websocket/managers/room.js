@@ -1,6 +1,19 @@
 'use strict';
 const roomsCtrl = require('../../database/controllers/rooms');
 
+/*  Returns the number of connected teachers in a room.
+
+    PARAMS
+      sockets (object)
+      roomId (string): id of the room
+
+    RETURN
+      (number): the number of connected teachers in the room
+*/
+const countTeachers = (sockets, roomId) => {
+  return Object.keys(sockets[roomId]['teacher']).length;
+};
+
 /*  Creates a new room in the sockets object.
 
     PARAMS
@@ -37,6 +50,7 @@ const doesExistInDb = (name, callback) => {
 };
 
 module.exports = {
+  countTeachers,
   createIfDoesntExistInRAM,
   doesExistInDb
 };

@@ -29,7 +29,7 @@ const init = (data, socket, user) => {
     let emitter = sockets[roomId][emitterType][user.userId];
     emitter.socket.emit('init', { id: user.userId });
 
-    let nbTeachers = userManager.countTeachers(sockets, roomId);
+    let nbTeachers = roomManager.countTeachers(sockets, roomId);
     if (userManager.isStudent(user)) {
       if (nbTeachers === 0) {
         mailer.sendMail(room.teachers, 'new-student', { roomName: roomId , studentName: name });

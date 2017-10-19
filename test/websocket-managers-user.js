@@ -2,7 +2,7 @@
 let userManager = require('../websocket/managers/user');
 let expect = require('chai').expect;
 
-describe('websocket/userManager', () => {
+describe('websocket/managers/user', () => {
 
   it('getUnderloadedTeacherId > should return the if of the most underloaded teacher', () => {
     let sockets = {
@@ -32,19 +32,5 @@ describe('websocket/userManager', () => {
     };
 
     expect(userManager.getUnderloadedTeacherId(sockets, 'test')).to.equal(null);
-  });
-
-  it('countTeachers > should return the number of connected teachers', () => {
-    let sockets = {
-      'test': {
-        teacher: {
-          0: { test: '' },
-          1: { test: '' },
-          2: { test: '' },
-        }
-      }
-    };
-
-    expect(userManager.countTeachers(sockets, 'test')).to.equal(3);
   });
 });
