@@ -21,6 +21,24 @@ const addMessage = (uuid, timestamp, message) => {
   .catch(err => console.error(err))
 };
 
+/*  Retrieves all messages of all conversations.
+
+    PARAMS
+      callback (function): called when the messages have been retrieved. Take one argument: data (array of object)
+
+    RETURN
+      none
+*/
+const retrieveAll = (callback) => {
+  return conversations
+  .findAll({
+    order: [ [ 'timestamp', 'ASC' ] ],
+    raw: true
+  })
+  .then(data => callback(data))
+  .catch(err => console.error(err))
+};
+
 /*  Retrieves all messages of a specific conversation.
 
     PARAMS
@@ -44,5 +62,6 @@ const retrieveMessagesById = (uuid, callback) => {
 
 module.exports = {
   addMessage,
+  retrieveAll,
   retrieveMessagesById
 };
