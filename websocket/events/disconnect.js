@@ -1,6 +1,14 @@
 const userManager = require('../managers/user');
 let sockets = require('../sockets');
 
+/*  Disconnects a client.
+
+    PARAMS
+      socketId (string): socket id
+
+    RETURN
+      none
+*/
 const disconnect = (socketId) => {
   let user = userManager.getEmitter(sockets, socketId);
   if (user === null) { return; }

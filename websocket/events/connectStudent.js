@@ -1,6 +1,16 @@
 const userManager = require('../managers/user');
 let sockets = require('../sockets');
 
+/*  Establishes the connection from a teacher to a student.
+
+    PARAMS
+      data (object): object sent by the client. It must contain
+        id (string): id of the student to connect to
+      socketId (string): socket id
+
+    RETURN
+      none
+*/
 const connectStudent = (data, socketId) => {
   let user = userManager.getEmitter(sockets, socketId);
   if (user === null) { return; }

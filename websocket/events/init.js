@@ -3,19 +3,30 @@ const userManager = require('../managers/user');
 const mailer = require('../../utils/mailer');
 let sockets = require('../sockets');
 
+/*  Initializes a user in the socket object.
+
+    PARAMS
+      socket (object): socket freshly created
+      decryptedToken (object): object from the decrypted token. It must contain
+        unm (string): user name
+        utp (string): user type, either 'student' or 'teacher'
+        rnm (string): room name
+
+    RETURN
+      none
+*/
 const init = (socket, decryptedToken) => {
-  roomManager.doesExistInDb(decryptedToken.roomId, room => {
+  roomManager.doesExistInDb(decryptedToken.rnm, room => {
     if (room === null) { return; }
 
     sockets[socket.id] = {
-      name: decryptedToken.userName,
-      type: decryptedToken.type,
-      room: decryptedToken.roomId,
+      name: decryptedToken.unm,
+      type: decryptedToken.utp,
+      room: decryptedToken.rnm,
       socket: socket
     };
     let user = sockets[socket.id];
     socket.emit('init', { id: socket.id });
-
     let nbTeachers = roomManager.countTeachers(sockets, user.room);
     if (userManager.isStudent(user)) {
       if (nbTeachers === 0) {
