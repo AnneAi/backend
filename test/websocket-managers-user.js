@@ -33,4 +33,16 @@ describe('websocket/managers/user', () => {
 
     expect(userManager.getUnderloadedTeacherId(sockets, 'test')).to.equal(null);
   });
+
+  it('hasValidType > should return type is valid', () => {
+    let user = { type: 'student' };
+
+    expect(userManager.hasValidType(user)).to.equal(true);
+  });
+
+  it('hasValidType > should return type is not valid', () => {
+    let user = { type: 'invalid type' };
+
+    expect(userManager.hasValidType(user)).to.equal(false);
+  });
 });

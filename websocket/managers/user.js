@@ -130,6 +130,20 @@ const isTeacher = user => {
   return user.type === 'teacher';
 };
 
+/*  Indicates if the user has a valid type.
+
+    PARAMS
+      user (object): path to the user in the socket object
+
+    RETURN
+      (boolean): true if type is valid, false otherwise
+*/
+const hasValidType = user => {
+  let isValid = false;
+  ['student', 'teacher'].indexOf(user.type) === -1 ? isValid = false : isValid = true;
+  return isValid;
+};
+
 /*  Returns the opposite type of the given user.
 
     PARAMS
@@ -161,6 +175,7 @@ module.exports = {
   getUnderloadedTeacherId,
   isStudent,
   isTeacher,
+  hasValidType,
   mirrorType,
   strUser
 };
