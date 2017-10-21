@@ -1,38 +1,24 @@
 const userManager = require('../managers/user');
 let sockets = require('../sockets');
 
-const connectStudent = (data, user) => {
-  let emitter = userManager.getEmitter(sockets, user);
-  if (emitter === null) { return; }
+const connectStudent = (data, socketId) => {
+  let user = userManager.getEmitter(sockets, socketId);
+  if (user === null) { return; }
 
-  if (user.type !== 'teacher') {
-    console.error(`${userManager.strUser(user)} fired 'connect-student' event but is not a teacher`);
-    return;
-  }
+  if (!userManager.isTeacher(user)) { return; }
 
-  let sId = data.id;
-  let recipient = userManager.getEmitter(sockets, { userId: sId, roomId: user.roomId, type:'student' });
-  if (recipient === null) {
-    console.log(`can not connect ${userManager.strUser(user)} to non existing student ${sId}`);
-    return;
-  }
+  let studentId = data.id;
+  let student = userManager.getEmitter(sockets, studentId);
+  if (student === null) { return; }
 
-  if (recipient.recipient !== undefined && recipient.recipient !== user.userId) {
-    console.log(`can not connect ${userManager.strUser(user)} to student ${sId} who is already connected to an other teacher`);
-    return;
-  }
+  if (student.recipient && student.recipient !== user.socket.id) { return; }
 
-  console.log(`${user.type} ${user.userId} connects to student ${sId}`);
+  user.recipient = studentId;
+  student.recipient = user.socket.id;
 
-  emitter.recipient = sId;
-  recipient.recipient = user.userId;
+  let msg = { id: studentId };
 
-  emitter.socket.emit(
-    'connect-student',
-    {
-      id: sId
-    }
-  );
+  user.socket.emit('connect-student', msg);
 };
 
 module.exports = connectStudent;
