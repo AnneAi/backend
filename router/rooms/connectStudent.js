@@ -1,5 +1,3 @@
-const uuidv4 = require('uuid/v4');
-
 const roomsCtrl = require('../../database/controllers/rooms');
 const tokenManager = require('../../utils/tokenManager');
 
@@ -51,10 +49,9 @@ const connectStudent = (req, res) => {
     }
 
     let user = {
-      roomId: room.name,
-      type: 'student',
-      userId: uuidv4(),
-      userName: userName
+      unm: userName,
+      utp: 'student',
+      rnm: room.name
     };
 
     tokenManager.generateToken(user, token => {
