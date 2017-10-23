@@ -27,6 +27,22 @@ const addWaiter = (name, email, phone, message, callback) => {
   .catch(err => console.error(err))
 };
 
+/*  Retrieve the whole waiting list.
+
+    PARAMS
+      callback (function): called when the messages have been retrieved. Take one argument: data (array of object)
+
+    RETURN
+      none
+*/
+const getAllWaiters = (callback) => {
+  return waitinglist
+  .findAll({ raw: true })
+  .then(data => callback(data))
+  .catch(err => console.error(err))
+};
+
 module.exports = {
-  addWaiter
+  addWaiter,
+  getAllWaiters
 };
