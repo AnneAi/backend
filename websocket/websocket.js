@@ -10,7 +10,7 @@ const setUpWebsocket = server => {
 
     socket.on('init', data => {
       authMW(data.token,
-        // valid token
+        // On valid token
         decryptedToken => eventHandler.init(socket, decryptedToken),
         // On invalid token
         () => {
