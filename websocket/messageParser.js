@@ -70,35 +70,37 @@ const extractYoutubeVideoParameters = url => {
     end: null
   };
 
+  // Extract video id
   if ((/embed\//g).test(url)) {
-    // Extract video id
     let begin = url.indexOf('embed/') + 6;
     let end = url.lastIndexOf('?');
     if (end === -1) end = url.length;
 
     params.id = url.substring(begin, end);
-
-    // Extract start parameter
-    if ((/start\=/g).test(url)) {
-      let begin = url.indexOf('start=') + 6;
-      let end = url.lastIndexOf('&');
-      if (end < begin) end = url.length;
-
-      params.start = url.substring(begin, end);
-    }
-
-    // Extract end parameter
-    if ((/end\=/g).test(url)) {
-      let begin = url.indexOf('end=') + 4;
-      let end = url.lastIndexOf('&');
-      if (end < begin) end = url.length;
-
-      params.end = url.substring(begin, end);
-    }
   } else if ((/watch\?v\=/g).test(url)) {
     let begin = url.indexOf('watch?v=') + 8;
+    let end = url.indexOf('&');
+    if (end === -1) end = url.length;
 
-    params.id = url.substring(begin);
+    params.id = url.substring(begin, end);
+  }
+
+  // Extract start parameter
+  if ((/start\=/g).test(url)) {
+    let begin = url.indexOf('start=') + 6;
+    let end = url.lastIndexOf('&');
+    if (end < begin) end = url.length;
+
+    params.start = url.substring(begin, end);
+  }
+
+  // Extract end parameter
+  if ((/end\=/g).test(url)) {
+    let begin = url.indexOf('end=') + 4;
+    let end = url.lastIndexOf('&');
+    if (end < begin) end = url.length;
+
+    params.end = url.substring(begin, end);
   }
 
   return params;

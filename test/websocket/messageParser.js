@@ -57,7 +57,7 @@ describe('MessageParser', () => {
 
   // extractYoutubeVideoParameters
   describe('extractYoutubeVideoParameters', () => {
-    it('should return the right parameters from the url of the video', () => {
+    it('should return the right params from watch url', () => {
       let id = 'UDmTxza0I6o';
       let url = `https://www.youtube.com/watch?v=${id}`;
       let expected = {
@@ -69,7 +69,77 @@ describe('MessageParser', () => {
       expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
     });
 
-    it('should return the right parameters from the url of the video', () => {
+    it('should return the right params from watch url w/ start & end params', () => {
+      let id = 'UDmTxza0I6o';
+      let start = '10';
+      let end = '20';
+      let url = `https://www.youtube.com/watch?v=${id}&start=${start}&end=${end}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params from watch url w/ inverted start & end params', () => {
+      let id = 'UDmTxza0I6o';
+      let start = '10';
+      let end = '20';
+      let url = `https://www.youtube.com/watch?v=${id}&end=${end}&start=${start}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params from watch url w/ start param', () => {
+      let id = 'UDmTxza0I6o';
+      let start = '10';
+      let end = null;
+      let url = `https://www.youtube.com/watch?v=${id}&start=${start}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params from watch url w/ end param', () => {
+      let id = 'UDmTxza0I6o';
+      let start = null;
+      let end = '10';
+      let url = `https://www.youtube.com/watch?v=${id}&end=${end}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params from embed url', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = null;
+      let end = null;
+      let url = `https://www.youtube.com/embed/${id}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params from embed url w/ start & end params', () => {
       let id = '-ZWGpOSS6T0';
       let start = '10';
       let end = '20';
@@ -83,7 +153,7 @@ describe('MessageParser', () => {
       expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
     });
 
-    it('should return the right params w/ inverted end and start params', () => {
+    it('should return the right params from embed url w/ inverted start & end params', () => {
       let id = '-ZWGpOSS6T0';
       let start = '10';
       let end = '20';
@@ -97,21 +167,7 @@ describe('MessageParser', () => {
       expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
     });
 
-    it('should return the right params w/ missing start param', () => {
-      let id = '-ZWGpOSS6T0';
-      let start = null;
-      let end = '20';
-      let url = `https://www.youtube.com/embed/${id}?end=${end}`;
-      let expected = {
-        id: id,
-        start: start,
-        end: end
-      };
-
-      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
-    });
-
-    it('should return the right params w/ missing end param', () => {
+    it('should return the right params from embed url w/ start param', () => {
       let id = '-ZWGpOSS6T0';
       let start = '10';
       let end = null;
@@ -125,11 +181,11 @@ describe('MessageParser', () => {
       expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
     });
 
-    it('should return the right params w/ missing start and end params', () => {
+    it('should return the right params from embed url w/ end param', () => {
       let id = '-ZWGpOSS6T0';
       let start = null;
-      let end = null;
-      let url = `https://www.youtube.com/embed/${id}`;
+      let end = '20';
+      let url = `https://www.youtube.com/embed/${id}?end=${end}`;
       let expected = {
         id: id,
         start: start,
