@@ -6,7 +6,7 @@ describe('MessageParser', () => {
 
   describe('isVimeoVideo', () => {
     it('should detect a valid url video', () => {
-      let url = 'https://vimeo.com/227718208';
+      let url = 'https://www.vimeo.com/227718208';
 
       expect(messageParser.isVimeoVideo(url)).to.equal(true);
     });
@@ -15,6 +15,20 @@ describe('MessageParser', () => {
       let url = 'https://vimeo.com/channels/staffpicks/239756014';
 
       expect(messageParser.isVimeoVideo(url)).to.equal(true);
+    });
+  });
+
+  describe('isYoutubeVideo', () => {
+    it('should detect a valid url video', () => {
+      let url = 'https://www.youtube.com/watch?v=UDmTxza0I6o';
+
+      expect(messageParser.isYoutubeVideo(url)).to.equal(true);
+    });
+
+    it('should detect a valid url video', () => {
+      let url = 'https://www.youtube.com/embed/-ZWGpOSS6T0?start=10&end=20';
+
+      expect(messageParser.isYoutubeVideo(url)).to.equal(true);
     });
   });
 

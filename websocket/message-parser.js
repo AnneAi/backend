@@ -22,7 +22,19 @@ const isEmpty = str => {
       (boolean): true if it is video url from vimeo, false otherwise
 */
 const isVimeoVideo = str => {
-  return (/^https:\/\/vimeo.com\/(\w*\/)*\d+$/g).test(str);
+  return (/^https:\/\/(www.)?vimeo.com\/(\w*\/)*\d+$/g).test(str);
+}
+
+/*  Test if the passed string represents a video url from youtube.
+
+    PARAMS
+      str (string): string to check
+
+    RETURN
+      (boolean): true if it is video url from youtube, false otherwise
+*/
+const isYoutubeVideo = str => {
+  return (/^https:\/\/(www.)?youtube.com\/(embed\/|watch\?v\=)([A-Za-z0-9]|-)+/g).test(str);
 }
 
 /*  Parses a message.
@@ -52,6 +64,12 @@ const parser = (data, user) => {
       platform: 'vimeo',
       id: data.payload.substring(data.payload.lastIndexOf('/') + 1)
     };
+  } else if (isYoutubeVideo(data.payload)) {
+    msg.type = 'video';
+    msg.payload = {
+      platform: 'ytb',
+      id: data.payload.substring(data.payload.lastIndexOf('/') + 1)
+    };
   }
   // Text
   else {
@@ -66,5 +84,6 @@ const parser = (data, user) => {
 module.exports = {
   isEmpty,
   isVimeoVideo,
+  isYoutubeVideo,
   parser
 };
