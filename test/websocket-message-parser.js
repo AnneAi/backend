@@ -1,6 +1,6 @@
 'use strict';
 let expect = require('chai').expect;
-let parser = require('../websocket/message-parser');
+let messageParser = require('../websocket/message-parser');
 
 describe('MessageParser', () => {
 
@@ -10,7 +10,7 @@ describe('MessageParser', () => {
       let user = { userId: 1, roomId: 'AAAAAA', type: 'teacher' };
       let emitter = { recipient: 2 };
 
-      let toTest = parser(data, user, emitter);
+      let toTest = messageParser.parser(data, user, emitter);
 
       let expected = null;
 
@@ -22,7 +22,7 @@ describe('MessageParser', () => {
       let user = { userId: 1, roomId: 'AAAAAA', type: 'teacher' };
       let emitter = { recipient: 2 };
 
-      let toTest = parser(data, user, emitter);
+      let toTest = messageParser.parser(data, user, emitter);
 
       let expected = null;
 
@@ -34,7 +34,7 @@ describe('MessageParser', () => {
       let user = { userId: 1, roomId: 'AAAAAA', type: 'teacher' };
       let emitter = { recipient: 2 };
 
-      let toTest = parser(data, user, emitter);
+      let toTest = messageParser.parser(data, user, emitter);
 
       let expected = null;
 
@@ -46,7 +46,7 @@ describe('MessageParser', () => {
       let user = { userId: 1, roomId: 'AAAAAA', type: 'teacher' };
       let emitter = { recipient: 2 };
 
-      let toTest = parser(data, user, emitter);
+      let toTest = messageParser.parser(data, user, emitter);
 
       let expected = null;
 
@@ -57,7 +57,7 @@ describe('MessageParser', () => {
       let data = { payload: 'some text' };
       let user = { room: 'AAAAAA', type: 'teacher', recipient: 2, socket: { id: 1 } };
 
-      let toTest = parser(data, user);
+      let toTest = messageParser.parser(data, user);
 
       let expected = {
         emitter: user.socket.id,
@@ -78,7 +78,7 @@ describe('MessageParser', () => {
       let data = { payload: `https://vimeo.com/${id}` };
       let user = { room: 'AAAAAA', type: 'teacher', recipient: 2, socket: { id: 1 } };
 
-      let toTest = parser(data, user);
+      let toTest = messageParser.parser(data, user);
 
       let expected = {
         emitter: user.socket.id,
