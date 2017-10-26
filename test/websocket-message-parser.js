@@ -4,6 +4,20 @@ let messageParser = require('../websocket/message-parser');
 
 describe('MessageParser', () => {
 
+  describe('isVimeoVideo', () => {
+    it('should detect a valid url video', () => {
+      let url = 'https://vimeo.com/227718208';
+
+      expect(messageParser.isVimeoVideo(url)).to.equal(true);
+    });
+
+    it('should detect a valid url video', () => {
+      let url = 'https://vimeo.com/channels/staffpicks/239756014';
+
+      expect(messageParser.isVimeoVideo(url)).to.equal(true);
+    });
+  });
+
   describe('parser', () => {
     it('should return null from undefined data', () => {
       let data = undefined;

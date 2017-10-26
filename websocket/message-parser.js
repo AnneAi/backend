@@ -13,6 +13,18 @@ const isEmpty = str => {
   return false;
 };
 
+/*  Test if the passed string represents a video url from vimeo.
+
+    PARAMS
+      str (string): string to check
+
+    RETURN
+      (boolean): true if it is video url from vimeo, false otherwise
+*/
+const isVimeoVideo = str => {
+  return (/^https:\/\/vimeo.com\/(\w*\/)*\d+$/g).test(str);
+}
+
 /*  Parses a message.
 
     PARAMS
@@ -33,13 +45,16 @@ const parser = (data, user) => {
   };
 
   let msg = {}
-  if ((/https:\/\/vimeo.com\/[0-9]+/g).test(data.payload)) {
+  // Videos
+  if (isVimeoVideo(data.payload)) {
     msg.type = 'video';
     msg.payload = {
       platform: 'vimeo',
       id: data.payload.substring(data.payload.lastIndexOf('/') + 1)
     };
-  } else {
+  }
+  // Text
+  else {
     msg.type = 'text';
     msg.payload = data.payload;
   }
@@ -48,4 +63,8 @@ const parser = (data, user) => {
   return metamsg;
 };
 
-module.exports = parser;
+module.exports = {
+  isEmpty,
+  isVimeoVideo,
+  parser
+};
