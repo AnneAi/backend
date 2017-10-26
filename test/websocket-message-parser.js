@@ -44,7 +44,7 @@ describe('MessageParser', () => {
       expect(messageParser.extractVimeoVideoParameters(url)).to.deep.equal(expected);
     });
 
-    it('should detect a valid url video', () => {
+    it('should return the id of the video', () => {
       let id = '239756014';
       let url = `https://vimeo.com/channels/staffpicks/${id}`;
       let expected = {
@@ -52,6 +52,91 @@ describe('MessageParser', () => {
       };
 
       expect(messageParser.extractVimeoVideoParameters(url)).to.deep.equal(expected);
+    });
+  });
+
+  // extractYoutubeVideoParameters
+  describe('extractYoutubeVideoParameters', () => {
+    it('should return the right parameters from the url of the video', () => {
+      let id = 'UDmTxza0I6o';
+      let url = `https://www.youtube.com/watch?v=${id}`;
+      let expected = {
+        id: id,
+        start: null,
+        end: null
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right parameters from the url of the video', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = '10';
+      let end = '20';
+      let url = `https://www.youtube.com/embed/${id}?start=${start}&end=${end}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params w/ inverted end and start params', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = '10';
+      let end = '20';
+      let url = `https://www.youtube.com/embed/${id}?end=${end}&start=${start}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params w/ missing start param', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = null;
+      let end = '20';
+      let url = `https://www.youtube.com/embed/${id}?end=${end}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params w/ missing end param', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = '10';
+      let end = null;
+      let url = `https://www.youtube.com/embed/${id}?start=${start}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should return the right params w/ missing start and end params', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = null;
+      let end = null;
+      let url = `https://www.youtube.com/embed/${id}`;
+      let expected = {
+        id: id,
+        start: start,
+        end: end
+      };
+
+      expect(messageParser.extractYoutubeVideoParameters(url)).to.deep.equal(expected);
     });
   });
 

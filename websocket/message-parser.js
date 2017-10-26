@@ -48,7 +48,59 @@ const isYoutubeVideo = str => {
 */
 const extractVimeoVideoParameters = url => {
   let params = {};
-  params. id = url.substring(url.lastIndexOf('/') + 1);
+
+  params.id = url.substring(url.lastIndexOf('/') + 1);
+
+  return params;
+}
+
+/*  Extract parameters from youtube video url.
+
+    PARAMS
+      url (string): url to the video
+
+    RETURN
+      (object): contains
+        id (string): id of the video
+*/
+const extractYoutubeVideoParameters = url => {
+  let params = {
+    id: null,
+    start: null,
+    end: null
+  };
+
+  if ((/embed\//g).test(url)) {
+    // Extract video id
+    let begin = url.indexOf('embed/') + 6;
+    let end = url.lastIndexOf('?');
+    if (end === -1) end = url.length;
+
+    params.id = url.substring(begin, end);
+
+    // Extract start parameter
+    if ((/start\=/g).test(url)) {
+      let begin = url.indexOf('start=') + 6;
+      let end = url.lastIndexOf('&');
+      if (end < begin) end = url.length;
+
+      params.start = url.substring(begin, end);
+    }
+
+    // Extract end parameter
+    if ((/end\=/g).test(url)) {
+      let begin = url.indexOf('end=') + 4;
+      let end = url.lastIndexOf('&');
+      if (end < begin) end = url.length;
+
+      params.end = url.substring(begin, end);
+    }
+  } else if ((/watch\?v\=/g).test(url)) {
+    let begin = url.indexOf('watch?v=') + 8;
+
+    params.id = url.substring(begin);
+  }
+
   return params;
 }
 
@@ -84,9 +136,14 @@ const parser = (data, user) => {
     };
   } else if (isYoutubeVideo(data.payload)) {
     msg.type = 'video';
+
+    let params = extractYoutubeVideoParameters(data.payload);
+
     msg.payload = {
       platform: 'ytb',
-      id: data.payload.substring(data.payload.lastIndexOf('/') + 1)
+      id: params.id,
+      start: params.start,
+      end: params.end
     };
   }
   // Text
@@ -104,5 +161,6 @@ module.exports = {
   isVimeoVideo,
   isYoutubeVideo,
   extractVimeoVideoParameters,
+  extractYoutubeVideoParameters,
   parser
 };
