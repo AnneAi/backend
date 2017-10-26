@@ -140,6 +140,7 @@ describe('MessageParser', () => {
     });
   });
 
+  // parser
   describe('parser', () => {
     it('should return null from undefined data', () => {
       let data = undefined;
@@ -226,6 +227,86 @@ describe('MessageParser', () => {
           payload: {
             platform: 'vimeo',
             id
+          }
+        }
+      };
+
+      expect(toTest).to.deep.equal(expected);
+    });
+
+    it('should return a video vimeo message object 2', () => {
+      let id = '239756014';
+      let data = { payload: `https://vimeo.com/channels/staffpicks/${id}` };
+      let user = { room: 'AAAAAA', type: 'teacher', recipient: 2, socket: { id: 1 } };
+
+      let toTest = messageParser.parser(data, user);
+
+      let expected = {
+        emitter: user.socket.id,
+        emitterType: user.type,
+        recipient: user.recipient,
+        timestamp: toTest.timestamp,
+        message: {
+          type: 'video',
+          payload: {
+            platform: 'vimeo',
+            id
+          }
+        }
+      };
+
+      expect(toTest).to.deep.equal(expected);
+    });
+
+    it('should return a video youtube message object', () => {
+      let id = 'UDmTxza0I6o';
+      let start = null;
+      let end = null;
+      let data = { payload: `https://www.youtube.com/watch?v=${id}` };
+      let user = { room: 'AAAAAA', type: 'teacher', recipient: 2, socket: { id: 1 } };
+
+      let toTest = messageParser.parser(data, user);
+
+      let expected = {
+        emitter: user.socket.id,
+        emitterType: user.type,
+        recipient: user.recipient,
+        timestamp: toTest.timestamp,
+        message: {
+          type: 'video',
+          payload: {
+            platform: 'ytb',
+            id: id,
+            start: start,
+            end: end
+          }
+        }
+      };
+
+      expect(toTest).to.deep.equal(expected);
+    });
+
+    it('should return a video youtube message object 2', () => {
+      let id = '-ZWGpOSS6T0';
+      let start = '10';
+      let end = '20';
+      let data = { payload: `https://www.youtube.com/embed/${id}?start=${start}&end=${end}` };
+      let user = { room: 'AAAAAA', type: 'teacher', recipient: 2, socket: { id: 1 } };
+
+      let toTest = messageParser.parser(data, user);
+
+      let expected = {
+        emitter: user.socket.id,
+        emitterType: user.type,
+        recipient: user.recipient,
+        timestamp: toTest.timestamp,
+        message: {
+          type: 'video',
+          payload: {
+            platform: 'ytb',
+            id: id,
+            start: start,
+            end: end
           }
         }
       };
