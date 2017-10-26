@@ -1,6 +1,6 @@
 'use strict';
 let expect = require('chai').expect;
-let messageParser = require('../websocket/message-parser');
+let messageParser = require('../../websocket/message-parser');
 
 describe('MessageParser', () => {
 
