@@ -1,6 +1,6 @@
 'use strict';
-let tokenManager = require('../../utils/tokenManager');
-let authMW = require('../../websocket/authMW');
+let tokenManager = require('../../../utils/tokenManager');
+let authMW = require('../../../websocket/middlewares/auth');
 let expect = require('chai').expect;
 
 describe('authMW', () => {
