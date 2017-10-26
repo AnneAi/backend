@@ -32,6 +32,29 @@ describe('MessageParser', () => {
     });
   });
 
+  // extractVimeoVideoParameters
+  describe('extractVimeoVideoParameters', () => {
+    it('should return the id of the video', () => {
+      let id = '227718208';
+      let url = `https://www.vimeo.com/${id}`;
+      let expected = {
+        id: id
+      };
+
+      expect(messageParser.extractVimeoVideoParameters(url)).to.deep.equal(expected);
+    });
+
+    it('should detect a valid url video', () => {
+      let id = '239756014';
+      let url = `https://vimeo.com/channels/staffpicks/${id}`;
+      let expected = {
+        id: id
+      };
+
+      expect(messageParser.extractVimeoVideoParameters(url)).to.deep.equal(expected);
+    });
+  });
+
   describe('parser', () => {
     it('should return null from undefined data', () => {
       let data = undefined;

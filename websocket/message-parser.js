@@ -37,6 +37,21 @@ const isYoutubeVideo = str => {
   return (/^https:\/\/(www.)?youtube.com\/(embed\/|watch\?v\=)([A-Za-z0-9]|-)+/g).test(str);
 }
 
+/*  Extract parameters from vimeo video url.
+
+    PARAMS
+      url (string): url to the video
+
+    RETURN
+      (object): contains
+        id (string): id of the video
+*/
+const extractVimeoVideoParameters = url => {
+  let params = {};
+  params. id = url.substring(url.lastIndexOf('/') + 1);
+  return params;
+}
+
 /*  Parses a message.
 
     PARAMS
@@ -60,9 +75,12 @@ const parser = (data, user) => {
   // Videos
   if (isVimeoVideo(data.payload)) {
     msg.type = 'video';
+
+    let params = extractVimeoVideoParameters(data.payload);
+
     msg.payload = {
       platform: 'vimeo',
-      id: data.payload.substring(data.payload.lastIndexOf('/') + 1)
+      id: params.id
     };
   } else if (isYoutubeVideo(data.payload)) {
     msg.type = 'video';
@@ -85,5 +103,6 @@ module.exports = {
   isEmpty,
   isVimeoVideo,
   isYoutubeVideo,
+  extractVimeoVideoParameters,
   parser
 };
