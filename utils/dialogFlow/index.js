@@ -2,8 +2,18 @@ const axios = require('axios');
 
 const dialogFlowConfig = require('../../configs/dialogFlow');
 
-const sendMessage = (query, sessionId) => {
-  let url = dialogFlowConfig.url;
+/*  Send a message to the dialogflow agent.
+
+    PARAMS
+      query (string): text message to send
+      sessionId (string|number): unique session id
+      callback (function): called when the agent's response is received. Take one argument:
+        data (object): response object (see dialogflow documentation)
+
+    RETURN
+      none
+*/
+const sendMessage = (query, sessionId, callback) => {
 
   let headers = {
     'Authorization': `Bearer ${dialogFlowConfig.clientKey}`,
@@ -17,13 +27,13 @@ const sendMessage = (query, sessionId) => {
   };
 
   axios({
-    url: url,
+    url: dialogFlowConfig.url,
     method: 'post',
     headers: headers,
     data: body
   })
   .then(res => {
-    console.log(res.data);
+    callback(res.data);
   })
   .catch(err => console.log(err));
 }
