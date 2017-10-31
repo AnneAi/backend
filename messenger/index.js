@@ -2,8 +2,9 @@
 
 const controllers = require('../database/controllers');
 const userManager = require('../websocket/managers/user');
-const parsers = require('./parsers');
+const parser = require('./parser');
 const adaptors = require('./adaptors');
+const senders = require('./senders');
 
 /*  Send a message from an emitter to a recipient.
 
@@ -24,28 +25,45 @@ const sendMessage = (sockets, user, data, recipient) => {
 
   // Parsing
 
-  let msg = parsers.platform.parser(data, user);
-  if (msg === null) { return; }
+  let messages =  parser(data, user, recipient);
+  if (messages.length === 0) { return; }
 
   // Sending
 
-  user.socket.emit('message', adaptors.fromUserToUser(msg, user));
-  if (recipient !== null) { recipient.socket.emit('message', adaptors.fromUserToUser(msg, recipient)); }
+  if (userManager.isStudent(user)) {
+    messages.forEach(msg => {
+      user.socket.emit('message', adaptors.fromUserToUser(msg, user));
 
-  user.timestamp = msg.timestamp;
+      senders.dialogFlow.sendMessage(data.payload, user.socket.id, agentResponse => {
+        let agentUser = userManager.createAgent(user.room, user.socket.id);
+
+        sendMessage(sockets, agentUser, agentResponse, user);
+      });
+    });
+  } else if (userManager.isAgent(user)) {
+    messages.forEach(msg => {
+      recipient.socket.emit('message', adaptors.fromUserToUser(msg, recipient));
+    });
+  }
+
+  user.timestamp = messages[messages.length - 1].timestamp;
 
   // Storing
 
-  let studentUuid = userManager.isStudent(user) ? user.socket.id : user.recipient;
+  if (userManager.isStudent(user) || userManager.isStudent(recipient)) {
+    let studentUuid = userManager.isStudent(user) ? user.socket.id : user.recipient;
 
-  msg.emitterName = user.name;
-  msg.room = user.room;
-  if (recipient !== null) {
-    msg.recipientType = recipient.type;
-    msg.recipientName = recipient.name;
+    messages.forEach(msg => {
+      msg.emitterName = user.name;
+      msg.room = user.room;
+      if (recipient !== null) {
+        msg.recipientType = recipient.type;
+        msg.recipientName = recipient.name;
+      }
+      controllers.conversations.addMessage(studentUuid, user.timestamp, msg);
+
+    });
   }
-
-  controllers.conversations.addMessage(studentUuid, user.timestamp, msg);
 };
 
 module.exports = {
