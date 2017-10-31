@@ -1,5 +1,8 @@
+'use strict';
 const sendMessage = require('./sendMessage');
+const parse = require('./parse');
 
 module.exports = {
-  sendMessage
+  parse: parse,
+  sendMessage: sendMessage
 };
