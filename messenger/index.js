@@ -19,10 +19,6 @@ const senders = require('./senders');
 */
 const sendMessage = (sockets, user, data, recipient) => {
 
-  // Triggers
-
-  if (userManager.isTeacher(user) && recipient === null) { return; }
-
   // Parsing
 
   let messages =  parser(data, user, recipient);
@@ -30,15 +26,13 @@ const sendMessage = (sockets, user, data, recipient) => {
 
   // Sending
 
-  if (userManager.isStudent(user)) {
+  if (userManager.isStudent(user) && !userManager.isAgent(recipient)
+    || userManager.isTeacher(user) && userManager.isHuman(recipient)) {
     messages.forEach(msg => {
       user.socket.emit('message', adaptors.fromUserToUser(msg, user));
-
-      senders.dialogFlow.sendMessage(data.payload, user.socket.id, agentResponse => {
-        let agentUser = userManager.createAgent(user.room, user.socket.id);
-
-        sendMessage(sockets, agentUser, agentResponse, user);
-      });
+      if (recipient) {
+        recipient.socket.emit('message', adaptors.fromUserToUser(msg, recipient));
+      }
     });
   } else if (userManager.isAgent(user)) {
     messages.forEach(msg => {
@@ -61,7 +55,6 @@ const sendMessage = (sockets, user, data, recipient) => {
         msg.recipientName = recipient.name;
       }
       controllers.conversations.addMessage(studentUuid, user.timestamp, msg);
-
     });
   }
 };
