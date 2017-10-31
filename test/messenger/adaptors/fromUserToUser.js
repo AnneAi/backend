@@ -1,37 +1,32 @@
 'use strict';
 let expect = require('chai').expect;
-let adaptor = require('../../../messenger/adaptors').fromUserToUser;
+let adaptor = require('../../../messenger/adaptors/fromUserToUser');
 
 describe('Messenger fromUserToUser adaptor', () => {
 
   it('should return a valid object', () => {
-    // Params
-
-    let id = '1';
-    let type = 'text';
-    let text = 'what is meaning of life?';
-
-    // Test
 
     let message = {
-      emitter: id,
+      emitter: '-1',
       message: {
-        type: type,
-        text: text
+        type: 'text',
+        text: 'what is meaning of life?'
       }
     };
 
     let user = {
       socket: {
-        id: id
+        id: '-1'
       }
     };
 
     let expected = {
       align: 'right',
-      emitter: id,
-      type: type,
-      text: text
+      emitter: '-1',
+      message: {
+        type: 'text',
+        text: 'what is meaning of life?'
+      }
     };
 
     expect(adaptor(message, user)).to.deep.equal(expected);
