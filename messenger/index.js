@@ -1,12 +1,14 @@
+'use strict';
+
 const controllers = require('../database/controllers');
 const userManager = require('../websocket/managers/user');
-const parser = require('../websocket/messageParser').parser;
+const parsers = require('./parsers');
 
 const messenger = (sockets, user, data) => {
   let recipient = userManager.getEmitter(sockets, user.recipient);
   if (userManager.isTeacher(user) && recipient === null) { return; }
 
-  let msg = parser(data, user);
+  let msg = parsers.platform.parser(data, user);
   if (msg === null) { return; }
 
   user.socket.emit('message', msg);
