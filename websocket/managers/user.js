@@ -122,6 +122,42 @@ const getUnderloadedTeacherId = (sockets, room) => {
   return underloadedId;
 };
 
+/*  Create a user agent.
+
+    PARAMS
+      room (string): name of the room the agent belongs to
+      recipient (string): id of the recipient
+
+    RETURN
+      (object): user agent
+*/
+const createAgent = (room, recipient) => {
+  return {
+    name: 'JenyAI',
+    type: 'agent',
+    room: room,
+    socket: {
+      id: 'agent'
+    },
+    recipient: recipient,
+    timestamp: null
+  };
+};
+
+/*  Indicates if the user is an agent.
+
+    PARAMS
+      user (object): path to the user in the socket object
+
+    RETURN
+      (boolean): true if agent, false otherwise
+*/
+const isAgent = user => {
+  if (!user) return false;
+
+  return user.type === 'agent';
+};
+
 /*  Indicates if the user is a student.
 
     PARAMS
@@ -163,11 +199,13 @@ const strUser = user => {
 };
 
 module.exports = {
+  createAgent,
   connectToUnderloadedTeacher,
   getEmitter,
   getEmitterAndRecipient,
   deleteEmitter,
   getUnderloadedTeacherId,
+  isAgent,
   isStudent,
   isTeacher,
   strUser
