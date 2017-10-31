@@ -186,6 +186,18 @@ const isTeacher = user => {
   return user.type === 'teacher';
 };
 
+/*  Indicate if the user is a student or a teacher.
+
+    PARAMS
+      user (object): path to the user in the socket object
+
+    RETURN
+      (boolean): true if student or teacher, false otherwise
+*/
+const isHuman = user => {
+  return isStudent(user) || isTeacher(user);
+};
+
 /*  Stringifies a user.
 
     PARAMS
@@ -208,5 +220,6 @@ module.exports = {
   isAgent,
   isStudent,
   isTeacher,
+  isHuman,
   strUser
 };

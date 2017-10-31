@@ -96,6 +96,36 @@ describe('UserManager', () => {
     });
   });
 
+  describe('isHuman', () => {
+    it('should detect a user human', () => {
+      let user = {
+        type: 'student'
+      };
+
+      let expected = true;
+
+      expect(userManager.isHuman(user)).to.equal(expected);
+    });
+
+    it('should not detect a user human', () => {
+      let user = {
+        type: 'not a human'
+      };
+
+      let expected = false;
+
+      expect(userManager.isHuman(user)).to.equal(expected);
+    });
+
+    it('should not detect a user human 2', () => {
+      let user = undefined;
+
+      let expected = false;
+
+      expect(userManager.isHuman(user)).to.equal(expected);
+    });
+  });
+
   it('getUnderloadedTeacherId > should return the if of the most underloaded teacher', () => {
     let sockets = {
       0: { type: 'teacher', load: 15, room: 'test', socket: { id: 0 } },
