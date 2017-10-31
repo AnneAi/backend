@@ -131,6 +131,8 @@ const getUnderloadedTeacherId = (sockets, room) => {
       (boolean): true if student, false otherwise
 */
 const isStudent = user => {
+  if (!user) return false;
+
   return user.type === 'student';
 };
 
@@ -143,6 +145,8 @@ const isStudent = user => {
       (boolean): true if teacher, false otherwise
 */
 const isTeacher = user => {
+  if (!user) return false;
+  
   return user.type === 'teacher';
 };
 

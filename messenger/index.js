@@ -17,10 +17,10 @@ const adaptors = require('./adaptors');
 */
 const messenger = (sockets, user, data, recipient) => {
 
-  if (userManager.isTeacher(user) && recipient === null) { return; }
+  if (userManager.isTeacher(user) && recipient === null) { return null; }
 
   let msg = parsers.platform.parser(data, user);
-  if (msg === null) { return; }
+  if (msg === null) { return null; }
 
   user.socket.emit('message', adaptors.toUser(msg, user));
   if (recipient !== null) { recipient.socket.emit('message', adaptors.toUser(msg, recipient)); }
