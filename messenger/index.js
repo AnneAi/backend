@@ -2,6 +2,7 @@
 
 const userManager = require('../websocket/managers/user');
 const parsers = require('./parsers');
+const adaptors = require('./adaptors');
 
 /*  Send a message from an emitter to a recipient.
 
@@ -21,8 +22,8 @@ const messenger = (sockets, user, data, recipient) => {
   let msg = parsers.platform.parser(data, user);
   if (msg === null) { return; }
 
-  user.socket.emit('message', msg);
-  if (recipient !== null) { recipient.socket.emit('message', msg); }
+  user.socket.emit('message', adaptors.toUser(msg, user));
+  if (recipient !== null) { recipient.socket.emit('message', adaptors.toUser(msg, recipient)); }
 
   user.timestamp = msg.timestamp;
 
