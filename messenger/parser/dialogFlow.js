@@ -25,7 +25,7 @@ const parser = (raw, recipient) => {
       case 0: // text message
         parsedMsg.push({
           emitter: '-1',
-          emitterType: 'chatbot',
+          emitterType: 'agent',
           recipient: recipient.socket.id,
           timestamp: new Date(),
           message: {
