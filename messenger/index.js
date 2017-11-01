@@ -26,8 +26,8 @@ const sendMessage = (sockets, user, data, recipient) => {
 
   // Sending
 
-  if (userManager.isStudent(user) && !userManager.isAgent(recipient)
-    || userManager.isTeacher(user) && userManager.isHuman(recipient)) {
+  if (userManager.isStudent(user)
+    || userManager.isTeacher(user) && userManager.isStudent(recipient)) {
     messages.forEach(msg => {
       user.socket.emit('message', adaptors.fromUserToUser(msg, user));
       if (recipient) {
@@ -35,9 +35,22 @@ const sendMessage = (sockets, user, data, recipient) => {
       }
     });
   } else if (userManager.isAgent(user)) {
+    let teacher = userManager.getEmitter(sockets, recipient.recipient);
     messages.forEach(msg => {
       recipient.socket.emit('message', adaptors.fromUserToUser(msg, recipient));
+      if (teacher !== null) teacher.socket.emit('message', adaptors.fromUserToUser(msg, teacher));
     });
+  }
+
+  if (userManager.isStudent(user)) {
+    if (user.discussWithAgent) {
+      messages.forEach(msg => {
+        senders.dialogFlow.sendMessage(msg.message.text, user.socket.id, agentResponse => {
+          let agentUser = userManager.createAgent(user.room, user.socket.id);
+          sendMessage(sockets, agentUser, agentResponse, user);
+        });
+      });
+    }
   }
 
   user.timestamp = messages[messages.length - 1].timestamp;
