@@ -16,6 +16,10 @@ const fromUserToUser = (message, user) => {
     msg.align = message.emitterType === 'student' ? 'right' : 'left';
   } else if (user.type === 'teacher') {
     msg.align = (message.emitterType === 'teacher' || message.emitterType === 'agent') ? 'right' : 'left';
+
+    if (msg.emitterType === 'agent') {
+      msg.emitterType === 'teacher';
+    }
   }
 
   return msg;
