@@ -55,11 +55,7 @@ describe('UserManager', () => {
         name: 'JenyAI',
         type: 'agent',
         room: room,
-        socket: {
-          id: 'agent'
-        },
-        recipient: recipient,
-        timestamp: null
+        recipient: recipient
       };
 
       expect(userManager.createAgent(room, recipient)).to.deep.equal(expected);
