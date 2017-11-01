@@ -5,12 +5,19 @@ const connectTeacher = require('./connectTeacher');
 const create = require('./create');
 const deleteRoom = require('./delete');
 const getAllDetails = require('./getAllDetails');
+const getAllName = require('./getAllName');
 const getOneDetails = require('./getOneDetails');
 
-router.post('/create', create);
+/**** GET ****/
+
+router.get('/', getAllName);
 
 router.get('/details', getAllDetails);
 router.get('/details/:name', getOneDetails);
+
+/**** POST ****/
+
+router.post('/create', create);
 
 router.post('/delete', deleteRoom);
 
