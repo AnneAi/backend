@@ -36,8 +36,8 @@ describe('crypto', () => {
       let message = 'I am text';
       let encryptionKey = 'key';
 
-      crypto.HmacSha256(message, encryptionKey, encrypted1 => {
-        crypto.HmacSha256(message, encryptionKey, encrypted2 => {
+      crypto.hmacSha256(message, encryptionKey, encrypted1 => {
+        crypto.hmacSha256(message, encryptionKey, encrypted2 => {
           expect(encrypted1).to.equal(encrypted2);
           done();
         });
@@ -49,8 +49,8 @@ describe('crypto', () => {
       let m2 = 'iem taxt';
       let encryptionKey = 'key';
       
-      crypto.HmacSha256(m1, encryptionKey, encrypted1 => {
-        crypto.HmacSha256(m2, encryptionKey, encrypted2 => {
+      crypto.hmacSha256(m1, encryptionKey, encrypted1 => {
+        crypto.hmacSha256(m2, encryptionKey, encrypted2 => {
           expect(encrypted1).to.not.equal(encrypted2);
           done();
         });

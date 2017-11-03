@@ -73,7 +73,7 @@ const decrypt = (message, encryptionKey, callback) => {
     RETURN
       none
 */
-const HmacSha256 = (message, encryptionKey, callback) => {
+const hmacSha256 = (message, encryptionKey, callback) => {
   const hmac = crypto.createHmac('sha256', encryptionKey);
 
   let encrypted = '';
@@ -94,5 +94,5 @@ const HmacSha256 = (message, encryptionKey, callback) => {
 module.exports = {
   encrypt,
   decrypt,
-  HmacSha256
+  hmacSha256
 };

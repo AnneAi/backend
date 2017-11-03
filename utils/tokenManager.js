@@ -49,7 +49,7 @@ const decryptToken = (token, callback) => {
   let encodedPayload = pieces[0];
   let originalSignature = pieces[1];
 
-  crypto.HmacSha256(encodedPayload, config.encryptionKey, signature => {
+  crypto.hmacSha256(encodedPayload, config.encryptionKey, signature => {
     if (signature === originalSignature) {
       try {
         let payload = JSON.parse(base64Decode(encodedPayload));
@@ -85,7 +85,7 @@ const generateToken = (info, callback) => {
 
   let encodedPayload = base64Encode(JSON.stringify(payload));
 
-  crypto.HmacSha256(encodedPayload, config.encryptionKey, signature => {
+  crypto.hmacSha256(encodedPayload, config.encryptionKey, signature => {
     let token = encodedPayload + '.' + signature;
 
     callback(token);
