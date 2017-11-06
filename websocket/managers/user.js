@@ -1,5 +1,10 @@
+let userManager = { };
+
+module.exports = userManager;
+
 const conversationsCtrl = require('../../database/controllers/conversations');
 const adaptors = require('../../messenger/adaptors');
+const roomManager = require('./room');
 
 /*  Connect a student to the teacher in charge of the least number of students.
 
@@ -10,7 +15,7 @@ const adaptors = require('../../messenger/adaptors');
     RETURN
       none
 */
-const connectToUnderloadedTeacher = (sockets, user) => {
+userManager.connectToUnderloadedTeacher = (sockets, user) => {
   let teacherId = getUnderloadedTeacherId(sockets, user.room);
   if (teacherId === null) {
     delete user.recipient;
@@ -65,7 +70,7 @@ const connectToUnderloadedTeacher = (sockets, user) => {
     RETURN
       (object): the client object or null if not found
 */
-const getEmitter = (sockets, socketId) => {
+userManager.getEmitter = (sockets, socketId) => {
   let client = sockets[socketId];
   if (!client) { client = null; }
   return client;
@@ -82,7 +87,7 @@ const getEmitter = (sockets, socketId) => {
         emitter (object): the emitter object or null if not found
         recipient (object): the recipient object or null if not found
 */
-const getEmitterAndRecipient = (sockets, socketId) => {
+userManager.getEmitterAndRecipient = (sockets, socketId) => {
   let emitter = getEmitter(sockets, socketId);
   if (!emitter) { return { emitter: null, recipient: null }; }
   let recipient = getEmitter(sockets, emitter.recipient);
@@ -99,7 +104,7 @@ const getEmitterAndRecipient = (sockets, socketId) => {
     RETURN
       none
 */
-const deleteEmitter = (sockets, socketId) => {
+userManager.deleteEmitter = (sockets, socketId) => {
   delete sockets[socketId];
 };
 
@@ -112,12 +117,12 @@ const deleteEmitter = (sockets, socketId) => {
     RETURN
       (number): the teacher's id or null if no teacher is connected
 */
-const getUnderloadedTeacherId = (sockets, room) => {
+userManager.getUnderloadedTeacherId = (sockets, room) => {
   // retrieve all teachers connected to the room
   let teachers = [ ];
   Object.keys(sockets).forEach(socketId => {
     let u = sockets[socketId];
-    if (u.room === room && isTeacher(u)) {
+    if (u.room === room && userManager.isTeacher(u)) {
       teachers.push(u);
     }
   });
@@ -146,7 +151,7 @@ const getUnderloadedTeacherId = (sockets, room) => {
     RETURN
       (object): user agent
 */
-const createAgent = (room, recipient) => {
+userManager.createAgent = (room, recipient) => {
   return {
     name: 'JenyAI',
     type: 'agent',
@@ -166,7 +171,7 @@ const createAgent = (room, recipient) => {
     RETURN
       (object): student user
 */
-const createStudent = (room, recipient, name, socket) => {
+userManager.createStudent = (room, recipient, name, socket) => {
   return {
     name: name,
     type: 'student',
@@ -188,7 +193,7 @@ const createStudent = (room, recipient, name, socket) => {
     RETURN
       (object): teacher user
 */
-const createTeacher = (room, recipient, name, socket) => {
+userManager.createTeacher = (room, recipient, name, socket) => {
   return {
     name: name,
     type: 'teacher',
@@ -211,7 +216,7 @@ const createTeacher = (room, recipient, name, socket) => {
     RETURN
       (object): teacher user
 */
-const createUser = (type, room, recipient, name, socket) => {
+userManager.createUser = (type, room, recipient, name, socket) => {
   if (type === 'student') {
     return createStudent(room, recipient, name, socket);
   } else if (type === 'teacher') {
@@ -231,7 +236,7 @@ const createUser = (type, room, recipient, name, socket) => {
     RETURN
       (boolean): true if agent, false otherwise
 */
-const isAgent = user => {
+userManager.isAgent = user => {
   if (!user) return false;
 
   return user.type === 'agent';
@@ -245,7 +250,7 @@ const isAgent = user => {
     RETURN
       (boolean): true if student, false otherwise
 */
-const isStudent = user => {
+userManager.isStudent = user => {
   if (!user) return false;
 
   return user.type === 'student';
@@ -259,7 +264,7 @@ const isStudent = user => {
     RETURN
       (boolean): true if teacher, false otherwise
 */
-const isTeacher = user => {
+userManager.isTeacher = user => {
   if (!user) return false;
 
   return user.type === 'teacher';
@@ -273,8 +278,8 @@ const isTeacher = user => {
     RETURN
       (boolean): true if student or teacher, false otherwise
 */
-const isHuman = user => {
-  return isStudent(user) || isTeacher(user);
+userManager.isHuman = user => {
+  return userManager.isStudent(user) || userManager.isTeacher(user);
 };
 
 /*  Indicate if the user is in the specified room.
@@ -286,7 +291,7 @@ const isHuman = user => {
     RETURN
       (boolean): true if in the room, false otherwise
 */
-const isInRoom = (user, room) => {
+userManager.isInRoom = (user, room) => {
   return user.room === room;
 };
 
@@ -299,7 +304,7 @@ const isInRoom = (user, room) => {
     RETURN
       (boolean): true if same room, false otherwise
 */
-const inSameRoom = (u1, u2) => {
+userManager.inSameRoom = (u1, u2) => {
   return u1.room === u2.room;
 };
 
@@ -311,25 +316,6 @@ const inSameRoom = (u1, u2) => {
     RETURN
       (string): the user stringified
 */
-const strUser = user => {
+userManager.strUser = user => {
   return `${user.name} (${user.type}, ${user.socket.id})`;
-};
-
-module.exports = {
-  createAgent,
-  createStudent,
-  createTeacher,
-  createUser,
-  connectToUnderloadedTeacher,
-  getEmitter,
-  getEmitterAndRecipient,
-  deleteEmitter,
-  getUnderloadedTeacherId,
-  isAgent,
-  isStudent,
-  isTeacher,
-  isHuman,
-  isInRoom,
-  inSameRoom,
-  strUser
 };
