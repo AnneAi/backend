@@ -122,6 +122,26 @@ describe('UserManager', () => {
     });
   });
 
+  describe('isInRoom', () => {
+    it('should say the user is in the specified room', () => {
+      let room = 'room';
+      let user = { room: 'room' };
+
+      let expected = true;
+
+      expect(userManager.isInRoom(user, room)).to.equal(expected);
+    });
+
+    it('should say the user is not in the specified room', () => {
+      let room = 'roomA';
+      let user = { room: 'roomB' };
+
+      let expected = false;
+
+      expect(userManager.isInRoom(user, room)).to.equal(expected);
+    });
+  });
+
   it('getUnderloadedTeacherId > should return the if of the most underloaded teacher', () => {
     let sockets = {
       0: { type: 'teacher', load: 15, room: 'test', socket: { id: 0 } },

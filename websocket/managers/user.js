@@ -277,6 +277,19 @@ const isHuman = user => {
   return isStudent(user) || isTeacher(user);
 };
 
+/*  Indicate if the user is in the specified room.
+
+    PARAMS
+      user (object): path to the user in the socket object
+      room (string): name of the room
+
+    RETURN
+      (boolean): true if in the room, false otherwise
+*/
+const isInRoom = (user, room) => {
+  return user.room === room;
+};
+
 /*  Indicate if the users are in the same room.
 
     PARAMS
@@ -316,6 +329,7 @@ module.exports = {
   isStudent,
   isTeacher,
   isHuman,
+  isInRoom,
   inSameRoom,
   strUser
 };
