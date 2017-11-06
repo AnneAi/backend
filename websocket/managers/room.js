@@ -1,4 +1,9 @@
 'use strict';
+
+let roomManager = { };
+
+module.exports = roomManager;
+
 const roomsCtrl = require('../../database/controllers/rooms');
 const userManager = require('./user');
 
@@ -11,7 +16,7 @@ const userManager = require('./user');
     RETURN
       (number): the number of connected teachers in the room
 */
-const countTeachers = (sockets, room) => {
+roomManager.countTeachers = (sockets, room) => {
   let counter = 0;
   Object.keys(sockets).forEach(socketId => {
     let user = sockets[socketId];
@@ -31,7 +36,7 @@ const countTeachers = (sockets, room) => {
     RETURN
       (array of object): the connected teachers in the room
 */
-const getTeachers = (sockets, room) => {
+roomManager.getTeachers = (sockets, room) => {
   let teachersList = [ ];
 
   Object.keys(sockets).forEach(key => {
@@ -53,7 +58,7 @@ const getTeachers = (sockets, room) => {
     RETURN
       (array of object): the connected students in the room
 */
-const getStudents = (sockets, room) => {
+roomManager.getStudents = (sockets, room) => {
   let studentsList = [ ];
 
   Object.keys(sockets).forEach(key => {
@@ -76,15 +81,8 @@ const getStudents = (sockets, room) => {
     RETURN
       none
 */
-const doesExistInDb = (name, callback) => {
+roomManager.doesExistInDb = (name, callback) => {
   roomsCtrl.find(name, room => {
     callback(room);
   });
-};
-
-module.exports = {
-  countTeachers,
-  getTeachers,
-  getStudents,
-  doesExistInDb
 };
