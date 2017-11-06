@@ -15,4 +15,26 @@ describe('roomManager', () => {
       expect(roomManager.countTeachers(sockets, 'test')).to.equal(3);
     });
   });
+
+  describe('getStudents', () => {
+    it('should get the list of the students in the specified room', () => {
+      let sockets = {
+        0: { type: 'teacher', room: 'roomA' },
+        2: { type: 'teacher', room: 'roomA' },
+        1: { type: 'teacher', room: 'roomA' },
+        3: { type: 'student', room: 'roomA' },
+        4: { type: 'student', room: 'roomA' },
+        5: { type: 'student', room: 'roomB' },
+        5: { type: 'student', room: 'roomC' }
+      };
+      let room = 'roomA';
+
+      let expected = [
+        { type: 'student', room: 'roomA' },
+        { type: 'student', room: 'roomA' }
+      ];
+
+      expect(roomManager.getStudents(sockets, room)).to.deep.equal(expected);
+    });
+  });
 });
