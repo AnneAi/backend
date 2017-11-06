@@ -16,6 +16,28 @@ describe('roomManager', () => {
     });
   });
 
+  describe('getTeachers', () => {
+    it('should get the list of the teachers in the specified room', () => {
+      let sockets = {
+        0: { type: 'teacher', room: 'roomA' },
+        2: { type: 'teacher', room: 'roomA' },
+        1: { type: 'teacher', room: 'roomB' },
+        3: { type: 'student', room: 'roomA' },
+        4: { type: 'student', room: 'roomA' },
+        5: { type: 'student', room: 'roomB' },
+        5: { type: 'student', room: 'roomC' }
+      };
+      let room = 'roomA';
+
+      let expected = [
+        { type: 'teacher', room: 'roomA' },
+        { type: 'teacher', room: 'roomA' }
+      ];
+
+      expect(roomManager.getTeachers(sockets, room)).to.deep.equal(expected);
+    });
+  });
+
   describe('getStudents', () => {
     it('should get the list of the students in the specified room', () => {
       let sockets = {

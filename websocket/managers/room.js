@@ -22,6 +22,28 @@ const countTeachers = (sockets, room) => {
   return counter;
 };
 
+/*  Returns the connected teachers in a room.
+
+    PARAMS
+      sockets (object)
+      room (string): name of the room
+
+    RETURN
+      (array of object): the connected teachers in the room
+*/
+const getTeachers = (sockets, room) => {
+  let teachersList = [ ];
+
+  Object.keys(sockets).forEach(key => {
+    let user = sockets[key];
+    if (userManager.isTeacher(user) && userManager.isInRoom(user, room)) {
+      teachersList.push(user);
+    }
+  });
+
+  return teachersList;
+};
+
 /*  Returns the connected students in a room.
 
     PARAMS
@@ -62,6 +84,7 @@ const doesExistInDb = (name, callback) => {
 
 module.exports = {
   countTeachers,
+  getTeachers,
   getStudents,
   doesExistInDb
 };
