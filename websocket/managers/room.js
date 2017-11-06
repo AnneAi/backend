@@ -7,6 +7,26 @@ module.exports = roomManager;
 const roomsCtrl = require('../../database/controllers/rooms');
 const userManager = require('./user');
 
+/*  Returns the number of connected students in a room.
+
+    PARAMS
+      sockets (object)
+      room (string): name of the room
+
+    RETURN
+      (number): the number of connected students in the room
+*/
+roomManager.countStudents = (sockets, room) => {
+  let counter = 0;
+  Object.keys(sockets).forEach(socketId => {
+    let user = sockets[socketId];
+    if (userManager.isStudent(user) && userManager.isInRoom(user, room)) {
+      counter++;
+    }
+  });
+  return counter;
+};
+
 /*  Returns the number of connected teachers in a room.
 
     PARAMS
@@ -47,28 +67,6 @@ roomManager.getTeachers = (sockets, room) => {
   });
 
   return teachersList;
-};
-
-/*  Returns the connected students in a room.
-
-    PARAMS
-      sockets (object)
-      room (string): name of the room
-
-    RETURN
-      (array of object): the connected students in the room
-*/
-roomManager.getStudents = (sockets, room) => {
-  let studentsList = [ ];
-
-  Object.keys(sockets).forEach(key => {
-    let user = sockets[key];
-    if (userManager.isStudent(user) && userManager.isInRoom(user, room)) {
-      studentsList.push(user);
-    }
-  });
-
-  return studentsList;
 };
 
 /*  Retrieves a room from the database.

@@ -3,8 +3,21 @@ let roomManager = require('../../../websocket/managers/room');
 let expect = require('chai').expect;
 
 describe('roomManager', () => {
+  describe('countStudents', () => {
+    it('should count the students in a room', () => {
+      let sockets = {
+        0: { type: 'teacher', room: 'test', socket: { id: 0 } },
+        3: { type: 'student', room: 'test', socket: { id: 3 } },
+        2: { type: 'teacher', room: 'test', socket: { id: 2 } },
+        1: { type: 'teacher', room: 'test', socket: { id: 1 } },
+      };
+
+      expect(roomManager.countStudents(sockets, 'test')).to.equal(1);
+    });
+  });
+
   describe('countTeachers', () => {
-    it('should return the number of connected teachers', () => {
+    it('should count the teachers in a room', () => {
       let sockets = {
         0: { type: 'teacher', load: 15, room: 'test', socket: { id: 0 } },
         3: { type: 'student', room: 'test', socket: { id: 3 } },
@@ -35,28 +48,6 @@ describe('roomManager', () => {
       ];
 
       expect(roomManager.getTeachers(sockets, room)).to.deep.equal(expected);
-    });
-  });
-
-  describe('getStudents', () => {
-    it('should get the list of the students in the specified room', () => {
-      let sockets = {
-        0: { type: 'teacher', room: 'roomA' },
-        2: { type: 'teacher', room: 'roomA' },
-        1: { type: 'teacher', room: 'roomA' },
-        3: { type: 'student', room: 'roomA' },
-        4: { type: 'student', room: 'roomA' },
-        5: { type: 'student', room: 'roomB' },
-        5: { type: 'student', room: 'roomC' }
-      };
-      let room = 'roomA';
-
-      let expected = [
-        { type: 'student', room: 'roomA' },
-        { type: 'student', room: 'roomA' }
-      ];
-
-      expect(roomManager.getStudents(sockets, room)).to.deep.equal(expected);
     });
   });
 });
