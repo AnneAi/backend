@@ -85,6 +85,26 @@ userManager.connectToUnderloadedTeacher = (sockets, user) => {
   });
 };
 
+/*  Disconnect a student from its current teacher.
+
+    PARAMS
+      sockets (object)
+      student (object)
+
+    RETURN
+      none
+*/
+userManager.disconnectStudent = (sockets, student) => {
+  let teacher = userManager.getEmitter(sockets, student.recipient);
+  if (teacher !== null) {
+    teacher.load--;
+
+    let msg = { student: student.socket.id };
+
+    teacher.socket.emit('del-student', msg);
+  }
+};
+
 /*  Returns the client associated to the given id.
 
     PARAMS
