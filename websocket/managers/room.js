@@ -7,6 +7,27 @@ module.exports = roomManager;
 const roomsCtrl = require('../../database/controllers/rooms');
 const userManager = require('./user');
 
+/*  Balance the load over teachers in a classroom.
+
+    PARAMS
+      sockets (object)
+      room (string): name of the room
+
+    RETURN
+      none
+*/
+roomManager.balanceLoad = (sockets, room) => {
+  let averageLoad = parseInt(roomManager.countStudents(sockets, room) / roomManager.countTeachers(sockets, room));
+
+  for (let i = 0 ; i < averageLoad ; i++) {
+    let student = userManager.getStudentFromOverloadedTeacher(sockets, room);
+    if (student) {
+      userManager.disconnectStudent(sockets, student);
+      userManager.connectToUnderloadedTeacher(sockets, student);
+    }
+  }
+};
+
 /*  Returns the number of connected students in a room.
 
     PARAMS
