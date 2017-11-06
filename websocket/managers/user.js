@@ -6,6 +6,30 @@ const conversationsCtrl = require('../../database/controllers/conversations');
 const adaptors = require('../../messenger/adaptors');
 const roomManager = require('./room');
 
+/*  Get a student from the teacher in charge of the highest number of students.
+
+    PARAMS
+      sockets (object)
+      room (string): room name to perform the search into
+
+    RETURN
+      (object) a student or undefined if not found
+*/
+userManager.getStudentFromOverloadedTeacher = (sockets, room) => {
+  // Retrieve the most overloaded teacher
+  let teacher = userManager.getEmitter(
+    sockets,
+    userManager.getOverloadedTeacherId(sockets, room)
+  );
+  if (teacher === null) { return; }
+
+  // Select one student from the ones associated to the most overloaded teacher
+  // that is not the student the teacher is currently talking to
+  let classroom = roomManager.getTeacherClassroom(sockets, teacher);
+
+  return classroom.find(s => s.socket.id !== teacher.recipient);
+};
+
 /*  Connect a student to the teacher in charge of the least number of students.
 
     PARAMS
