@@ -69,6 +69,28 @@ roomManager.getTeachers = (sockets, room) => {
   return teachersList;
 };
 
+/*  Returns the list of students connected to the specified teacher.
+
+    PARAMS
+      sockets (object)
+      teacher (object)
+
+    RETURN
+      (array of object): list of students
+*/
+roomManager.getTeacherClassroom = (sockets, teacher) => {
+  let studentsList = [ ];
+
+  Object.keys(sockets).forEach(key => {
+    let student = sockets[key];
+    if (userManager.isStudent(student) && userManager.isInRoom(student, teacher.room) && student.recipient === teacher.socket.id) {
+      studentsList.push(student);
+    }
+  });
+
+  return studentsList;
+};
+
 /*  Retrieves a room from the database.
 
     PARAMS

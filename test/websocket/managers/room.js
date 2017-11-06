@@ -38,7 +38,7 @@ describe('roomManager', () => {
         3: { type: 'student', room: 'roomA' },
         4: { type: 'student', room: 'roomA' },
         5: { type: 'student', room: 'roomB' },
-        5: { type: 'student', room: 'roomC' }
+        6: { type: 'student', room: 'roomC' }
       };
       let room = 'roomA';
 
@@ -48,6 +48,29 @@ describe('roomManager', () => {
       ];
 
       expect(roomManager.getTeachers(sockets, room)).to.deep.equal(expected);
+    });
+  });
+
+  describe('getTeacherClassroom', () => {
+    it('should get the list of students associated to the specified teacher', () => {
+      let teacher = { type: 'teacher', room: 'roomA', socket: { id: 0 } };
+      let sockets = {
+        0: { type: 'teacher', room: 'roomA', socket: { id: 0 } },
+        1: { type: 'teacher', room: 'roomA', socket: { id: 1 } },
+        2: { type: 'teacher', room: 'roomB', socket: { id: 2 } },
+        3: { type: 'student', room: 'roomA', socket: { id: 3 }, recipient: 0 },
+        4: { type: 'student', room: 'roomA', socket: { id: 4 }, recipient: 1 },
+        5: { type: 'student', room: 'roomB', socket: { id: 5 }, recipient: 2 },
+        6: { type: 'student', room: 'roomA', socket: { id: 6 }, recipient: 0 }
+      };
+      let room = 'roomA';
+
+      let expected = [
+        { type: 'student', room: 'roomA', socket: { id: 3 }, recipient: 0 },
+        { type: 'student', room: 'roomA', socket: { id: 6 }, recipient: 0 }
+      ];
+
+      expect(roomManager.getTeacherClassroom(sockets, teacher)).to.deep.equal(expected);
     });
   });
 });
