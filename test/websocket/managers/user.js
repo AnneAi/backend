@@ -46,6 +46,28 @@ describe('UserManager', () => {
     });
   });
 
+  describe('getOverloadedTeacherId', () => {
+    it('should get the id of the most overloaded teacher', () => {
+      let sockets = {
+        0: { type: 'teacher', load: 15, room: 'test', socket: { id: 0 } },
+        1: { type: 'teacher', load: 10, room: 'test', socket: { id: 1 } },
+        3: { type: 'teacher', load: 20, room: 'test', socket: { id: 3 } },
+      };
+
+      expect(userManager.getOverloadedTeacherId(sockets, 'test')).to.equal(3);
+    });
+
+    it('should get the id of the first most overloaded teacher', () => {
+      let sockets = {
+        0: { type: 'teacher', load: 20, room: 'test', socket: { id: 0 } },
+        1: { type: 'teacher', load: 10, room: 'test', socket: { id: 1 } },
+        3: { type: 'teacher', load: 20, room: 'test', socket: { id: 3 } },
+      };
+
+      expect(userManager.getOverloadedTeacherId(sockets, 'test')).to.equal(0);
+    });
+  });
+
   describe('createAgent', () => {
     it('should create a user agent', () => {
       let room = 'room';

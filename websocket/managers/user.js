@@ -108,6 +108,34 @@ userManager.deleteEmitter = (sockets, socketId) => {
   delete sockets[socketId];
 };
 
+/*  Retrieve the id of the teacher in charge of the highest number of students.
+
+    PARAMS
+      sockets (object)
+      room (string): room in which to perform the search
+
+    RETURN
+      (string): the teacher's id or null if no teacher is found
+*/
+userManager.getOverloadedTeacherId = (sockets, room) => {
+  // retrieve all teachers connected to the room
+  let teachers = roomManager.getTeachers(sockets, room);
+  if (teachers.length === 0) { return null; }
+
+  // find the over loaded teacher
+  let maxLoad = 0;
+  let id = null;
+  teachers.forEach(teacher => {
+    let load = teacher.load;
+    if (load > maxLoad) {
+      id = teacher.socket.id;
+      maxLoad = load;
+    }
+  });
+
+  return id;
+};
+
 /*  Retrieves the id of the teacher in charge of the least number of students.
 
     PARAMS
