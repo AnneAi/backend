@@ -16,7 +16,7 @@ const roomManager = require('./room');
       none
 */
 userManager.connectToUnderloadedTeacher = (sockets, user) => {
-  let teacherId = getUnderloadedTeacherId(sockets, user.room);
+  let teacherId = userManager.getUnderloadedTeacherId(sockets, user.room);
   if (teacherId === null) {
     delete user.recipient;
 
@@ -26,7 +26,7 @@ userManager.connectToUnderloadedTeacher = (sockets, user) => {
     return;
   }
 
-  let teacher = getEmitter(sockets, teacherId);
+  let teacher = userManager.getEmitter(sockets, teacherId);
   if (teacher === null) {
     delete user.recipient;
 
@@ -88,9 +88,9 @@ userManager.getEmitter = (sockets, socketId) => {
         recipient (object): the recipient object or null if not found
 */
 userManager.getEmitterAndRecipient = (sockets, socketId) => {
-  let emitter = getEmitter(sockets, socketId);
+  let emitter = userManager.getEmitter(sockets, socketId);
   if (!emitter) { return { emitter: null, recipient: null }; }
-  let recipient = getEmitter(sockets, emitter.recipient);
+  let recipient = userManager.getEmitter(sockets, emitter.recipient);
 
   return { emitter: emitter, recipient: recipient };
 };
@@ -239,11 +239,11 @@ userManager.createTeacher = (room, recipient, name, socket) => {
 */
 userManager.createUser = (type, room, recipient, name, socket) => {
   if (type === 'student') {
-    return createStudent(room, recipient, name, socket);
+    return userManager.createStudent(room, recipient, name, socket);
   } else if (type === 'teacher') {
-    return createTeacher(room, recipient, name, socket);
+    return userManager.createTeacher(room, recipient, name, socket);
   } else if (type === 'agent') {
-    return createAgent(room, recipient);
+    return userManager.createAgent(room, recipient);
   }
 
   return null;
