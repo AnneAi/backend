@@ -147,14 +147,7 @@ userManager.getOverloadedTeacherId = (sockets, room) => {
 */
 userManager.getUnderloadedTeacherId = (sockets, room) => {
   // retrieve all teachers connected to the room
-  let teachers = [ ];
-  Object.keys(sockets).forEach(socketId => {
-    let u = sockets[socketId];
-    if (u.room === room && userManager.isTeacher(u)) {
-      teachers.push(u);
-    }
-  });
-  if (teachers.length === 0) { return null; }
+  let teachers = roomManager.getTeachers(sockets, room);
 
   // find the under loaded one
   let minLoad = 10000;
