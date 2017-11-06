@@ -30,10 +30,9 @@ const init = (socket, decryptedToken) => {
 
     let nbTeachers = roomManager.countTeachers(sockets, user.room);
     if (userManager.isStudent(user)) {
+      userManager.connectToUnderloadedTeacher(sockets, user);
+      
       if (nbTeachers === 0) {
-
-        // Activate agent for student
-        user.discussWithAgent = true;
 
         // Warn teachers a student needs help
         let mailData = {
@@ -42,8 +41,6 @@ const init = (socket, decryptedToken) => {
         };
 
         mailer.sendMail(room.teachers, 'new-student', mailData);
-      } else {
-        userManager.connectToUnderloadedTeacher(sockets, user);
       }
     } else if (userManager.isTeacher(user)) {
       if (nbTeachers === 1) {
