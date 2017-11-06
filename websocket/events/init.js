@@ -31,7 +31,7 @@ const init = (socket, decryptedToken) => {
     let nbTeachers = roomManager.countTeachers(sockets, user.room);
     if (userManager.isStudent(user)) {
       userManager.connectToUnderloadedTeacher(sockets, user);
-      
+
       if (nbTeachers === 0) {
 
         // Warn teachers a student needs help
@@ -50,6 +50,11 @@ const init = (socket, decryptedToken) => {
             userManager.connectToUnderloadedTeacher(sockets, u);
           }
         });
+      }
+
+      // Balance student load over all teachers
+      else {
+        roomManager.balanceLoad(sockets, user.room);
       }
     }
   });
