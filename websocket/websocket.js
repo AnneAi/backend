@@ -20,6 +20,8 @@ const setUpWebsocket = server => {
 
     socket.on('student-select', data => eventHandler.studentSelect(data, socket.id));
 
+    socket.on('student-switch', data => eventHandler.studentSwitch(data, socket.id));
+
     socket.on('message', data => eventHandler.message(data, socket.id));
 
     socket.on('typing-off', () => eventHandler.typingIndicatorHandler(socket.id, 'typing-off'));
