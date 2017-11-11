@@ -1,11 +1,11 @@
-const connectStudent = require('./connectStudent');
+const studentSelect = require('./studentSelect');
 const disconnect = require('./disconnect');
 const init = require('./init');
 const message = require('./message');
 const typingIndicatorHandler = require('./typingIndicatorHandler');
 
 module.exports = {
-  connectStudent,
+  studentSelect: studentSelect,
   disconnect,
   init,
   message,
