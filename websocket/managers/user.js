@@ -76,7 +76,8 @@ userManager.connectToUnderloadedTeacher = (sockets, user) => {
     let socketMsg = {
       student: {
         id: user.socket.id,
-        name: user.name
+        name: user.name,
+        discussWithAgent: user.discussWithAgent
       },
       messages: adaptors.fromUserToUser(messages, teacher)
     };
