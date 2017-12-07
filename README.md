@@ -198,46 +198,185 @@ Here are described the existing routes of the API. To test the routes locally, a
 
 The routes deal with the management of:
 
-- `conversations`
+- `conversations`: retrieve the logs of all the conversations so far.
 
-- `rooms`
+- `rooms`: handle the basic CRUD operations to manage the available chat rooms.
+
+The different route sections are like applications that can be plugged easily to the API router (`router/index.js`). To extend the API you only have to create a new folder in the `router/` one, create inside an `index.js` that is a router (it lists all the routes of the new section), and insert it in the API one. The API is at the moment not protected using token but for security puposes it is a must-have.
 
 #### Rooms
 
-- `/classroom` (post): creates a new chat room.
+The `rooms` section is accessible through the base path `rooms/` (see API router).
 
-> Required body params:
+---
 
->> **id**: string (see config file for length) - id of the chat room
+- GET `/`: retrieve the name of all the existing rooms.
 
->> **password**: string (see config file for length) - password of the chat room
+Url params
 
+> *none*
 
-- `/classroom/:id` (get): check if a room exists for `id`.
+Body params
 
-> Required url params:
+> *none*
 
->> **id**: string - id to test
+Return
 
->> **password**: string (see config file for length) - id of the chat room
+> object
 
+>> *success* (boolean): true if no error was raised.
 
-- `/classroom/:id` (post): check if a room exists for `id` and `password`.
+>> *rooms* (array of strings): name of the rooms.
 
-> Required url params:
+---
 
->> **id**: string - id to test
+- GET `/details`: retrieve all information about all rooms.
 
-> Required body params:
+Url params
 
->> **password**: string - password to test
+> *name* (string): name of the room to get information about.
 
+Body params
 
-- `/classroom/:id` (delete): delete the room `id`.
+> *none*
 
-> Required url params:
+Return
 
->> **id**: string (see config file for length) - id of the room
+> (array of objects): information about all the rooms.
+
+---
+
+- GET `/details/:name`: retrieve all information about a room.
+
+Url params
+
+> *name* (string): name of the room to get information about.
+
+Body params
+
+> *none*
+
+Return
+
+> (object): information about a room.
+
+---
+
+- POST `/create`: create a new room.
+
+Url params
+
+> *none*
+
+Body params
+
+> *id* (string): name of the room.
+
+> *password* (string): password for teachers to connect to the room.
+
+> *teachers* (array of strings): contains all the emails addresses of the teachers to warn when a student connects and no teacher is connected to the room.
+
+Return
+
+> object
+
+>> *success* (boolean): true if no error was raised, false otherwise.
+
+---
+
+- POST `/delete`: delete a room.
+
+Url params
+
+> *none*
+
+Body params
+
+> *id* (string): name of the room.
+
+Return
+
+> object
+
+>> *success* (boolean): true if no error was raised, false otherwise.
+
+---
+
+- POST `/connect/student`: generate a token for a student to connect to a room.
+
+Url params
+
+> *none*
+
+Body params
+
+> *roomName* (string): name of the room.
+
+> *userName* (string): name of the user.
+
+Return
+
+> a valid token for the student to connect to a room.
+
+---
+
+- POST `/connect/teacher`: generate a token for a teacher to connect to a room.
+
+Url params
+
+> *none*
+
+Body params
+
+> *roomName* (string): name of the room.
+
+> *password* (string): password of the room.
+
+> *userName* (string): name of the user.
+
+Return
+
+> a valid token for the teacher to connect to a room.
+
+---
+
+#### Conversations
+
+The `conversations` section is accessible through the base path `conversations/` (see API router).
+
+---
+
+- GET `/`: retrieve all the messages exchanged using the platform.
+
+Url params
+
+> *none*
+
+Body params
+
+> *none*
+
+Return
+
+> CSV file
+
+---
+
+- GET `/delete`: delete all the conversations from the database.
+
+Url params
+
+> *none*
+
+Body params
+
+> *none*
+
+Return
+
+> 200 status code if deletion performed, 500 otherwise.
+
+---
 
 ## 4. Tests
 
