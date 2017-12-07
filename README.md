@@ -382,8 +382,12 @@ Return
 
 Run the tests with the command `npm test`. All tests files are stored in the `test` folder. The libraries used are Mocha and Chai to perform unit tests. For them to pass you will need to set up a PostgreSQL database on your computer.
 
-## Heroku apps
+## 5. Deployment
 
-- staging: https://staging-jenyai.herokuapp.com
+The backend is running on `Heroku` for convenience. To manage the applications, connect to the Heroku dashboard. The development pipeline is the following:
 
-- production: https://prod-jenyai.herokuapp.com
+1. Develop a new feature and test it locally.
+
+2. When it works, push it to the staging Heroku app that is linked to the staging frontend Angular app.
+
+3. When the feature is tested a functional, promote the staging app to the production app either on the Heroku dashboard or using the Heroku CLI or the slack Heroku app.
