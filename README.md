@@ -380,7 +380,7 @@ Return
 
 ## 4. Tests
 
-Run the test with the command `npm test`. All tests files are stored in the `test` folder.
+Run the tests with the command `npm test`. All tests files are stored in the `test` folder. The libraries used are Mocha and Chai to perform unit tests. For them to pass you will need to set up a PostgreSQL database on your computer.
 
 ## Heroku apps
 
